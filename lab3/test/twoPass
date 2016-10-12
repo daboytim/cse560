@@ -1,0 +1,24 @@
+; This is an example
+EG1      ORI 19
+Y        NMD 32            [Y] = 32
+Buff     RES 1             Buffer for input
+Acc      EQU 1             Acc = 1
+;
+Start    LD  Acc,Y         Acc <- 32
+         SHL 3,19          two instrs. to
+         SHL 3,1           ; clear R3
+         GTC 3             Input char to R3
+         ST  3,Buff        ;store char to Buff
+         IO  0,IncVal      Input integer
+         MUL Acc,=2        Acc <- Acc*2
+         OR  Acc,Buff(0)
+         ADD Acc,IncVal
+         BR  3,Finish      Done
+ByeMsg   CCD HT
+Finish   LD  2,ByeMsg      Put msg in R2
+         PTC 2             display first char
+         SHL 2,8           ready second char
+         IO  3,0(2)        display 2nd char
+         BR  0,Acc(3)      Halt with display
+IncVal   RES 1
+         END

@@ -1,0 +1,13 @@
+EG2      ORI
+TS       EQU 27      ! TS = 27
+V        NMD 27      ! [V] = 27
+Start    LDI 1,V     ! R1 = V = ?(relative)
+         LD  2,0(1)  ! R2 = [0+V] = 27
+         LDI 3,TS    ! R3 = TS = 27
+         LD  0,0(1)  ! R0 = [0+V] = 27
+         LD  1,0(1)  ! R1 = [0+V] = 27
+         SUB 1,=27   ! R1 = 27 ? 27 = 0
+         BRZ 1,Stop  ! if (R1 is 0) then halt
+         BR  3,Start ! goto Start
+Stop     BR  0,V(3)  ! halt; dump all
+         END

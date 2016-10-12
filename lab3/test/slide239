@@ -1,0 +1,9 @@
+Prog     ORI 20
+Acc      EQU 0
+Begin    LD  Acc,N      ;R0 <- 13
+         ADD Acc,=1     ;R0 <- R0+1
+         ST  Acc,Ans     M[Ans]<-R0
+         BR  0,0
+N        NMD 13
+Ans      RES 1
+         END Begin

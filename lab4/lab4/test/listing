@@ -1,0 +1,39 @@
++------------------------------------------------------------+
+|                         Listing                            |
+|------------------------------------------------------------|
+|   Object Code     |                 Source                 |
+|-------------------+----------------------------------------|
+| Loc  Data   Rel   | Rec   Label    OP    Operands/Comments |
+|(hex) (hex)        |(dec)                                   |
+|-------------------+----------------------------------------+
+|                   |       Mesg     ORI  
+|                   |       NOUT     EQU   2
+| 00   0A560        | 1     Txt      NMD   42336      also represents "\nV"
+| 01   616C0        | 2              CCD   al
+| 02   75650        | 3              CCD   ue
+| 03   3D200        | 4              CCD   = 
+| 04   00006        | 5     X        NMD   6
+|                   |       SavR     RES   1
+|                   |       Pairs    RES   1
+| 07   23005   M    | 6     Displ    ST    3,SavR     M[SavR] <- r3
+| 08   00004   M    | 7              LD    0,X        r0 <- M[X]
+| 09   E001A   M    | 8              BRN   0,Done     if (r0 < 0) goto Done
+| 0A   11004        | 9     Loop     LDI   1,4        Display text "\nValue= " (4 pairs of chars)
+| 0B   D1015   M    | 10    TLP      BRZ   1,Next     Terminate Text LooP
+| 0C   13004        | 11             LDI   3,4        Calc. offset in r3
+| 0D   21006   M    | 12             ST    1,Pairs    prepare for subtraction
+| 0E   43006   M    | 13             SUB   3,Pairs    offset = 4 - r1
+| 0F   02C00   M    | 14             LD    2,Txt(3)   r2 <- M[Txt + r3]
+| 10   B3800        | 15             PTC   2          output first char. of pair
+| 11   92008        | 16             SHL   2,8        get second char. ready
+| 12   B3800        | 17             PTC   2          output second char.
+| 13   4101C   M    | 18             SUB   1,=1       r1--
+| 14   C300B   M    | 19             BR    3,TLP      goto TLP
+| 15   B2004   M    | 20    Next     IO    NOUT,X     Display value in M[X]
+| 16   4001C   M    | 21             SUB   0,=1       r0--
+| 17   20004   M    | 22             ST    0,X        M[X] <- r0
+| 18   E001A   M    | 23             BRN   0,Done     if (r0 < 0) goto Done
+| 19   C300A   M    | 24             BR    3,Loop     goto Loop
+| 1A   03005   M    | 25    Done     LD    3,SavR     r3 <- M[SavR]
+| 1B   C3C00        | 26             BR    3,0(3)     return
+|                   |                END  

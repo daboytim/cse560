@@ -1,0 +1,19 @@
+;Example
+Begin    ORI
+derka    EQU Begin
+         RES 12
+         ADD 1,derka
+LOL      CCD Hi
+         LD  6,543(HI)
+         PTC ACC
+
+         MUL derka,LOL
+         RES LOL
+         AND LoL
+Begin2   ORI 17
+1bad     SHR 1,2(3)
+END      BR  0,0
+END      BRS END
+ACC      NMD 9
+         END Begin
+         ADD 1,2

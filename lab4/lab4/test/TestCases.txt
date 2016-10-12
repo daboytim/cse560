@@ -1,0 +1,668 @@
+Lab4-Test Cases
+---------------------------------------------------------
+---------------------------------------------------------
+TEST 1: Test for Unrelocatable Object File (no M at end of header)
+-------------------------
+Input: test_ob1.obj
+-------------------------
+
+H0FMain   0F05
+EStart 16
+T0FF3000XDispl
+T1001000XV
+T1121000XX
+T12F3000XDispl
+T13C0000
+
+-------------------------
+Expected Output:
+-------------------------
+
+N/A
+
+-------------------------
+Actual Output:
+-------------------------
+
+N/A
+
+-------------------------
+Error Log:
+-------------------------
+
+Error: Object file 'test_ob1.obj' is not relocatable.
+
+-------------------------
+Notes:
+-------------------------
+
+Test yielded correct results, message in error-log
+
+
+---------------------------------------------------------
+---------------------------------------------------------
+TEST 2: Test for Multiple Main declarations
+-------------------------
+Input 1: test_ob1.obj
+-------------------------
+
+H0FMain   0F05M
+EStart 16
+T0FF3000XDispl
+T1001000XV
+T1121000XX
+T12F3000XDispl
+T13C0000
+
+-------------------------
+Input 2: test_ob1.obj
+-------------------------
+
+H0FMain  0F05M
+EStart 16
+T0FF3000XDispl
+T1001000XV
+T1121000XX
+T12F3000XDispl
+T13C0000
+
+-------------------------
+Expected Output:
+-------------------------
+
+N/A
+
+-------------------------
+Actual Output:
+-------------------------
+
+N/A
+
+-------------------------
+Error Log:
+-------------------------
+
+Error: More than one 'Main' object file provided.
+
+-------------------------
+Notes:
+-------------------------
+
+Test yielded correct results, message in error-log
+
+
+---------------------------------------------------------
+---------------------------------------------------------
+TEST 3: Test for No 'Main' object files
+-------------------------
+Input 1: test_ob1.obj
+-------------------------
+
+H0FTre    0F05
+EStart 16
+T0FF3000XDispl
+T1001000XV
+T1121000XX
+T12F3000XDispl
+T13C0000
+
+-------------------------
+Expected Output:
+-------------------------
+
+N/A
+
+-------------------------
+Actual Output:
+-------------------------
+
+N/A
+
+-------------------------
+Error Log:
+-------------------------
+
+Error: No object files specify 'Main'.
+
+-------------------------
+Notes:
+-------------------------
+
+Test yielded correct results, message in error-log
+
+
+---------------------------------------------------------
+---------------------------------------------------------
+TEST 4: Test for No 'Main' object files
+-------------------------
+Input 1: test_ob1.obj
+-------------------------
+
+H0FTre    0FFFM
+EStart 16
+T0FF3000XDispl
+T1001000XV
+T1121000XX
+T12F3000XDispl
+T13C0000
+
+-------------------------
+Input 2-4: test_ob2.obj
+-------------------------
+
+H14Mesg  0DFFM
+EDispl 0E
+EX     0B
+T0D0A560
+T0E616C0
+T0F75650
+T103D200
+T1100006
+T1423012
+T1500011
+T16E0027
+T1711004
+T18D1022
+T1913004
+T1A21013
+T1B43013
+T1C02C0D
+T1DB3800
+T1E92008
+T1FB3800
+T2041029
+T21C3018
+T22B2011
+T2340029
+T2420011
+T25E0027
+T26C3017
+T2703012
+T28C3C00
+T2900001
+
+-------------------------
+Expected Output:
+-------------------------
+
+N/A
+
+-------------------------
+Actual Output:
+-------------------------
+
+N/A
+
+-------------------------
+Error Log:
+-------------------------
+
+Error: Footprint is too large: 770
+
+-------------------------
+Notes:
+-------------------------
+
+Test yielded correct results, message in error-log
+
+---------------------------------------------------------
+---------------------------------------------------------
+TEST 5: Test for already defined external symbol (program name; program lib.obj passed twice to linker).
+-------------------------
+Input 1: main.asm
+---------------
+Main     ORI
+         EXT Pnum
+         ENT Num
+         BRS 3,Pnum
+         BR  0,0(0)
+Num      NMD 7
+         END
+
+-------------------------
+Input 1: main.obj
+-------------------------
+
+H00Main  0003M
+ENum   02
+T00F3000XPnum
+T01C0000
+T0200007
+
+-------------------------
+Input 2-3: lib.asm
+-------------------------
+
+Lib      ORI
+         EXT Num
+         ENT Pnum
+Pnum     IO  2,Num
+         BR 3,0(3)
+         END
+
+-------------------------
+Input 2-3: lib.obj
+-------------------------
+
+H00Lib   0002M
+EPnum  00
+T00B2000XNum
+T01C3C00
+
+-------------------------
+Expected Output:
+-------------------------
+
+N/A
+
+-------------------------
+Actual Output:
+-------------------------
+
+N/A
+
+-------------------------
+Error Log:
+-------------------------
+
+Error: External symbol 'Lib' already defined.
+
+-------------------------
+Notes: 
+-------------------------
+
+The linker correctly halted execution when it encountered the second definition of 'Lib'
+
+
+---------------------------------------------------------
+---------------------------------------------------------
+TEST 6: Test for already defined external symbol (Pnum).
+-------------------------
+Input 1: main.asm
+-------------------------
+
+Main     ORI
+         EXT Pnum
+         ENT Num
+         BRS 3,Pnum
+         BR  0,0(0)
+Num      NMD 7
+         END
+
+-------------------------
+Input 1: main.obj
+-------------------------
+
+H00Main  0003M
+ENum   02
+T00F3000XPnum
+T01C0000
+T0200007
+
+-------------------------
+Input 2: lib.asm
+-------------------------
+
+Lib      ORI
+         EXT Num
+         ENT Pnum
+Pnum     IO  2,Num
+         BR 3,0(3)
+         END
+
+-------------------------
+Input 2: lib.obj
+-------------------------
+
+H00Lib   0002M
+EPnum  00
+T00B2000XNum
+T01C3C00
+
+-------------------------
+Input 3: libCopy.asm
+-------------------------
+
+LibCopy  ORI
+         EXT Num
+         ENT Pnum
+Pnum     IO  2,Num
+         BR 3,0(3)
+         END
+
+-------------------------
+Input 3: libCopy.obj
+-------------------------
+
+H00LibCop0002M
+EPnum  00
+T00B2000XNum
+T01C3C00
+
+-------------------------
+Expected Output:
+-------------------------
+
+N/A
+
+-------------------------
+Actual Output:
+-------------------------
+
+N/A
+
+-------------------------
+Error Log:
+-------------------------
+
+Error: External symbol 'Pnum' already defined.
+
+-------------------------
+Notes: 
+-------------------------
+
+The linker correctly halted execution when it encountered the second definition of 'Pnum'
+
+
+---------------------------------------------------------
+---------------------------------------------------------
+TEST 7: Test for undefined external symbol.
+-------------------------
+Input 1: main.asm
+-------------------------
+
+Main     ORI
+         EXT Pnum
+         ENT Num
+         BRS 3,Pnum
+         BR  0,0(0)
+Num      NMD 7
+         END
+
+-------------------------
+Input 1: main.obj
+-------------------------
+
+H00Main  0003M
+ENum   02
+T00F3000XPnum
+T01C0000
+T0200007
+
+-------------------------
+Input 2: lib.asm
+-------------------------
+
+Lib      ORI
+         EXT Num
+;         ENT Pnum
+Pnum     IO  2,Num
+         BR 3,0(3)
+         END
+
+-------------------------
+Input 2: lib.obj
+-------------------------
+
+H00Lib   0002M
+T00B2000XNum
+T01C3C00
+
+-------------------------
+Expected Output:
+-------------------------
+
+H04Main  0405
+
+-------------------------
+Actual Output:
+-------------------------
+
+H04Main  0405
+
+-------------------------
+Error Log:
+-------------------------
+
+Error: EXT symbol 'Pnum' not defined.
+
+-------------------------
+Notes:
+-------------------------
+
+The linker correctly halted execution when it encountered the undefined symbol 'Pnum'
+
+
+---------------------------------------------------------
+---------------------------------------------------------
+TEST 8: Test for correct linking.
+-------------------------
+Input 1: program.asm
+-------------------------
+
+Main     ORI
+         EXT Displ,V
+         ENT Start
+         EXT X
+;
+Start    BRS 3,Displ   Display 6..0
+         LD  1,V       r1 <- M[V]
+         ST  1,X       M[X] <- r1
+         BRS 3,Displ   Display 2..0
+         BR  0,0       ; halt
+         END
+-------------------------
+Input 1: program.obj
+-------------------------
+
+H00Main  0005M
+EStart 00
+T00F3000XDispl
+T0101000XV
+T0221000XX
+T03F3000XDispl
+T04C0000
+
+-------------------------
+Input 2: subr.asm
+-------------------------
+
+;Subroutine for displaying a series of lines of text
+; The lines of text display a count-down, from X to 0
+;Calling convention: register 3 contains return address
+; and registers 0, 1, & 2 are used and changed
+Mesg     ORI
+         ENT Displ,X
+NOUT     EQU 2
+;
+Txt      NMD 42336      also represents "\nV"
+         CCD al
+         CCD ue
+         CCD = 
+X        NMD 6
+SavR     RES 1
+Pairs    RES 1
+;
+Displ    ST  3,SavR     M[SavR] <- r3
+         LD  0,X        r0 <- M[X]
+         BRN 0,Done     if (r0 < 0) goto Done
+Loop     LDI 1,4        Display text "\nValue= " (4 pairs of chars)
+TLP      BRZ 1,Next     Terminate Text LooP
+         LDI 3,4        Calc. offset in r3
+         ST  1,Pairs    prepare for subtraction
+         SUB 3,Pairs    offset = 4 - r1
+         LD  2,Txt(3)   r2 <- M[Txt + r3]
+         PTC 2          output first char. of pair
+         SHL 2,8        get second char. ready
+         PTC 2          output second char.
+         SUB 1,=1       r1--
+         BR  3,TLP      goto TLP
+Next     IO  NOUT,X     Display value in M[X]
+         SUB 0,=1       r0--
+         ST  0,X        M[X] <- r0
+         BRN 0,Done     if (r0 < 0) goto Done
+         BR  3,Loop     goto Loop
+Done     LD  3,SavR     r3 <- M[SavR]
+         BR  3,0(3)     return
+         END
+
+-------------------------
+Input 2: subr.obj
+-------------------------
+
+H07Mesg  001DM
+EDispl 07
+EX     04
+T000A560
+T01616C0
+T0275650
+T033D200
+T0400006
+T0723005M
+T0800004M
+T09E001AM
+T0A11004
+T0BD1015M
+T0C13004
+T0D21006M
+T0E43006M
+T0F02C00M
+T10B3800
+T1192008
+T12B3800
+T134101CM
+T14C300BM
+T15B2004M
+T164001CM
+T1720004M
+T18E001AM
+T19C300AM
+T1A03005M
+T1BC3C00
+T1C00001
+
+-------------------------
+Input 3: val.asm
+-------------------------
+
+Data     ORI
+         EXT X
+         ENT V
+V        NMD 2
+NOUT     BR  0,0
+Done     BR  3,X
+         LD  1,=1
+         END Done
+
+-------------------------
+Input 3: val.obj
+-------------------------
+
+H02Data  0005M
+EV     00
+T0000002
+T01C0000
+T02C3000XX
+T0301004M
+T0400001
+
+-------------------------
+Expected Output:
+-------------------------
+
+H00Main  0027
+T00F300C
+T0101022
+T0221009
+T03F300C
+T04C0000
+T050A560
+T06616C0
+T0775650
+T083D200
+T0900006
+T0C2300A
+T0D00009
+T0EE001F
+T0F11004
+T10D101A
+T1113004
+T122100B
+T134300B
+T1402C05
+T15B3800
+T1692008
+T17B3800
+T1841021
+T19C3010
+T1AB2009
+T1B40021
+T1C20009
+T1DE001F
+T1EC300F
+T1F0300A
+T20C3C00
+T2100001
+T2200002
+T23C0000
+T24C3009
+T2501026
+T2600001
+
+-------------------------
+Actual Output:
+-------------------------
+
+H00Main  0027
+T00F300C
+T0101022
+T0221009
+T03F300C
+T04C0000
+T050A560
+T06616C0
+T0775650
+T083D200
+T0900006
+T0C2300A
+T0D00009
+T0EE001F
+T0F11004
+T10D101A
+T1113004
+T122100B
+T134300B
+T1402C05
+T15B3800
+T1692008
+T17B3800
+T1841021
+T19C3010
+T1AB2009
+T1B40021
+T1C20009
+T1DE001F
+T1EC300F
+T1F0300A
+T20C3C00
+T2100001
+T2200002
+T23C0000
+T24C3009
+T2501026
+T2600001
+
+-------------------------
+Error Log:
+-------------------------
+
+N/A
+
+-------------------------
+Notes:
+-------------------------
+
+The linker correctly linked the three files.
+
+
+END Lab4-Test Cases

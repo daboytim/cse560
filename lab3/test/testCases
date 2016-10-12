@@ -1,0 +1,21 @@
+ERRORS:
+!0) no ORI line
+!1) no symbol on ORI line
+!2) first line not ORI
+!3) no symbol on EQU line
+!4) no operand on EQU line
+!5) operand on EQU line not a symbol or an integer
+!6) operand on NMD line not an integer
+!7) operand on RES line not an integer
+!7.5) operand on CCD line not present/ |operand| < 2
+!8) operand on machine op lines not present
+!9) operand on all other lines incorrect
+!10) lebel on END line
+!11) more than one ORI line
+!12) empty line
+
+CORRECTNESS:
+!1) only one header record begining with H
+!2) header contains correct syntax
+!3) all other records begin with T
+!4) no blank lines between records

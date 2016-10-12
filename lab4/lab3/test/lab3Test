@@ -1,0 +1,38 @@
+atest1   ORI       program header
+X        NMD 22     M[1] = 22
+Y        NMD -17    M[2] = -17
+Z        NMD 5      M[3] = 5
+         RES 6      skip 6 words
+         LD  0,Y    R0 <-- (-17)
+         MUL 0,Z    R0 <-- (-17)*5 = (-85)
+         ST  0,4    M[4] <-- (-85)
+         LD  1,1    R1 <-- 22
+         DIV 1,3    R1 <-- 22/5 = 4
+         ST  1,5    M[5] = 4
+         LD  2,1    R2 <-- 22
+         AND 2,3    R2 <-- 0b10110 ^ 0b00101 = 0b00100 = 4
+         ST  2,6    M[6] <-- 4
+         LD  3,2    R3 <-- -17
+         OR  3,3    R3 <-- 0xFFFEF v 0x5 = 0xFFFEF = -17
+         ST  3,7    M[7] <-- -17
+         LD  1,Y    R1 <-- -17
+         SHR 1,5    R1 <-- 0xFFFEF shf.rt.5 = 0xFFFFF = -1
+         ST  1,8    M[8] <-- -1
+         LD  0,X    R0 <-- 22
+         SHL 0,3    R0 <-- 0b10110 shf.lf.3 = 0b10110000 = 176
+         ST  0,9    M[9] <-- 176
+         SHR 0,3(2) R0 <-- 0b10110000 shf.rt.7 = 0b1 = 1
+;                   Print "Done" (next 9 instructions)
+         LDI 2,C    use R2 as a base address for char data
+         LD  1,0(2) print from R1
+         IO  3,0(1) print 'D'
+         SHL 1,8    bring 'o' into position
+         PTC 1      print 'o'
+         LD  3,1(2) print from R3 this time ("ne" at offset 1)
+         PTC 3      print 'n'
+         SHL 3,8    bring 'e' into position
+         PTC 3      print 'e'
+         BR  0,0    halt quietly
+C        CCD Do     M[39] contains "Do"
+         CCD ne     M[40] contains "ne"
+         END 10     Execution is to start at Addr 0xA (= 10)
